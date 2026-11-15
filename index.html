@@ -155,8 +155,7 @@
       box-shadow: 0 1px 0 #ffb3cf
     }
 
-    .pill:focus-visible,
-    #kitty:focus-visible {
+    .pill:focus-visible {
       outline: 3px solid var(--red);
       outline-offset: 3px
     }
@@ -244,11 +243,20 @@
       cursor: grab;
       touch-action: none;
       user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      outline: none;
       position: relative;
       z-index: 6;
       filter: drop-shadow(0 14px 14px rgba(255, 107, 157, .35));
       animation: idle 3s ease-in-out infinite;
       transform-origin: 50% 100%
+    }
+
+    #kitty:focus,
+    #kitty:focus-visible,
+    #kitty:active {
+      outline: none
     }
 
     #kitty:active {
@@ -396,7 +404,15 @@
       display: block;
       margin: 10px auto;
       width: 200px;
-      cursor: pointer
+      cursor: pointer;
+      outline: none;
+      -webkit-tap-highlight-color: transparent
+    }
+
+    #cake:focus,
+    #cake:focus-visible,
+    #cake:active {
+      outline: none
     }
 
     .flame {
@@ -639,7 +655,8 @@
       cardTitle: "A little note for you",
       cardBody: " Tell her how amazing she is, bring up a funny memory, and wish her the best year ever. (Edit this text in the CFG block at the top of the script.)",
       sign: "— with love, from me 💋",
-      balloons: 8
+      balloons: 8,
+      musicFile: "music.mp3"
     };
     /* =================== */
     const $ = s => document.querySelector(s), rnd = n => Math.random() * n, pick = a => a[(rnd(a.length)) | 0];
@@ -675,21 +692,71 @@
     const giggle = () => { blip(700, 1300, .12, "triangle"); setTimeout(() => blip(900, 1500, .12, "triangle"), 130) };
     const popS = () => blip(500, 70, .12, "sawtooth", .2), ping = () => blip(1000, 1600, .12, "triangle", .08);
 
-    /* music box: Happy Birthday, loops */
+    /* music: custom audio file (music.mp3) with chime fallback */
+    const audio = new Audio(CFG.musicFile || "music.mp3");
+    audio.loop = true;
+    let playing = false, useSynth = false, mi = 0, nt = 0, mt = null;
+
+    audio.addEventListener("error", () => {
+      useSynth = true;
+    });
+
     const M = [[392, .75], [392, .25], [440, 1], [392, 1], [523, 1], [494, 2], [392, .75], [392, .25], [440, 1], [392, 1], [587, 1], [523, 2],
     [392, .75], [392, .25], [784, 1], [659, 1], [523, 1], [494, 1], [440, 1], [698, .75], [698, .25], [659, 1], [523, 1], [587, 1], [523, 2], [0, 2]];
-    const B = .42; let playing = false, mi = 0, nt = 0, mt = null;
+    const B = .42;
+
     function sched() {
       const a = ac(); while (nt < a.currentTime + .4) {
         const [f, b] = M[mi];
         if (f) { tone(f, nt, .9, .11); tone(f * 2, nt, .5, .035) } nt += B * b; mi = (mi + 1) % M.length
       } mt = setTimeout(sched, 100)
     }
-    function startM() { if (playing) return; const a = ac(); if (a.state === "suspended") a.resume(); mi = 0; nt = a.currentTime + .1; sched(); playing = true; $("#mus").textContent = "⏸ Pause" }
-    function stopM() { clearTimeout(mt); playing = false; $("#mus").textContent = "🎵 Music" }
+
+    function startSynth() {
+      const a = ac();
+      if (a.state === "suspended") a.resume();
+      mi = 0; nt = a.currentTime + .1;
+      sched();
+    }
+
+    function startM() {
+      if (playing) return;
+      playing = true;
+      $("#mus").textContent = "⏸ Pause";
+
+      if (!useSynth) {
+        const p = audio.play();
+        if (p !== undefined) {
+          p.catch(() => {
+            useSynth = true;
+            if (playing) startSynth();
+          });
+        }
+      } else {
+        startSynth();
+      }
+    }
+
+    function stopM() {
+      clearTimeout(mt);
+      if (!useSynth) {
+        audio.pause();
+      }
+      playing = false;
+      $("#mus").textContent = "🎵 Music";
+    }
+
     $("#mus").onclick = () => playing ? stopM() : startM();
 
-    document.addEventListener("visibilitychange", () => { if (!document.hidden && playing && AC && AC.state !== "running") AC.resume() });
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden && playing) {
+        if (!useSynth) {
+          audio.play().catch(() => {});
+        } else if (AC && AC.state !== "running") {
+          AC.resume();
+        }
+      }
+    });
     /* ---- confetti ---- */
     const cv = $("#conf"), cx = cv.getContext("2d"); let P = [], run = false;
     const size = () => { cv.width = innerWidth; cv.height = innerHeight }; size(); addEventListener("resize", size);
