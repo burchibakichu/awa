@@ -1,272 +1,772 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Happy Birthday! 🎀</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Pacifico&display=swap">
-<style>
-:root{--bg1:#fff5f9;--bg2:#ffd3e3;--pink:#ff6b9d;--red:#ff3b6b;--ink:#4a2338;--card:#fff;box-sizing:border-box;
-padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#3a1a2c;--bg2:#5a2540;--ink:#ffe3ee;--card:#4a2036}}
-html{background:var(--bg2);scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:"Fredoka","Trebuchet MS",sans-serif;color:var(--ink);min-height:100%;overflow-x:hidden;
-background:radial-gradient(circle at 20% 10%,#fff 0 6%,transparent 7%),var(--bg1);
-background:linear-gradient(180deg,var(--bg1),var(--bg2));-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;min-height:100vh;min-height:100dvh}
-#bg{position:fixed;inset:0;pointer-events:none;overflow:hidden}
-#bg span{position:absolute;bottom:-40px;opacity:.6;animation:rise linear infinite}
-@keyframes rise{to{transform:translateY(-115vh) rotate(30deg)}}
-/* gate */
-#gate{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
-background:linear-gradient(180deg,var(--bg1),var(--bg2));cursor:pointer;text-align:center;padding:20px;transition:opacity .7s,transform .7s}
-#gate.out{opacity:0;transform:scale(1.15);pointer-events:none}
-#gate .gift{font-size:96px;animation:bob 1.4s ease-in-out infinite;filter:drop-shadow(0 10px 12px rgba(255,59,107,.35))}
-#gate h2{font-family:"Pacifico",cursive;font-weight:400;font-size:clamp(1.6rem,6vw,2.4rem);color:var(--pink)}
-#gate p{opacity:.8}
-@keyframes bob{50%{transform:translateY(-14px) rotate(6deg)}}
-/* toolbar */
-.bar{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:12px;display:flex;gap:8px;z-index:20;flex-wrap:wrap;justify-content:flex-end}
-.pill{touch-action:manipulation;min-height:42px;border:0;background:var(--card);color:var(--ink);font:inherit;font-size:.95rem;padding:9px 15px;border-radius:999px;cursor:pointer;
-box-shadow:0 4px 0 #ffb3cf,0 8px 16px rgba(255,107,157,.25);transition:transform .15s}
-.pill:hover{transform:translateY(-2px)}.pill:active{transform:translateY(3px);box-shadow:0 1px 0 #ffb3cf}
-.pill:focus-visible,#kitty:focus-visible{outline:3px solid var(--red);outline-offset:3px}
-main{position:relative;z-index:2;display:none;padding:64px 16px 30px}
-main.show{display:block}
-h1{font-family:"Pacifico",cursive;font-weight:400;text-align:center;font-size:clamp(2.2rem,9vw,4.4rem);color:var(--pink);line-height:1.15;
-text-shadow:0 3px 0 #fff,0 6px 0 rgba(255,107,157,.25);animation:pop .9s cubic-bezier(.3,1.6,.5,1)}
-h1 small{display:block;font-family:"Fredoka",sans-serif;font-size:clamp(1rem,3.5vw,1.3rem);color:var(--ink);text-shadow:none;margin-top:6px}
-@keyframes pop{from{transform:scale(.3);opacity:0}}
-.hint{text-align:center;margin:12px auto 0;opacity:.75;max-width:420px;font-size:.95rem}
-/* stage */
-.stage{display:flex;flex-direction:column;align-items:center;margin-top:22px;min-height:340px}
-#bubble{background:var(--card);border-radius:22px;padding:10px 18px;font-size:1rem;max-width:260px;text-align:center;position:relative;
-box-shadow:0 5px 0 #ffb3cf;margin-bottom:16px}
-#bubble::after{content:"";position:absolute;left:50%;bottom:-12px;margin-left:-10px;border:10px solid transparent;border-top-color:var(--card);border-bottom:0}
-#kitty{width:min(300px,78vw);cursor:grab;touch-action:none;user-select:none;position:relative;z-index:6;
-filter:drop-shadow(0 14px 14px rgba(255,107,157,.35));animation:idle 3s ease-in-out infinite;transform-origin:50% 100%}
-#kitty:active{cursor:grabbing}
-@keyframes idle{50%{transform:translateY(-6px) rotate(-1.5deg)}}
-@keyframes jump{40%,60%{transform:translateY(-60px) scale(1.06,.94)}}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes wave{25%{transform:rotate(-35deg)}75%{transform:rotate(15deg)}}
-#kitty.jumping{animation:jump .6s ease}#kitty.spinning{animation:spin .8s ease}
-#kitty.waving #arm-r{transform-box:fill-box;transform-origin:20% 80%;animation:wave .5s 3}
-#bow{transform-box:fill-box;transform-origin:center;animation:wig 2.4s ease-in-out infinite}
-@keyframes wig{50%{transform:rotate(7deg)}}
-.eye{animation:blink 4.2s infinite;transform-box:fill-box;transform-origin:center}
-@keyframes blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
-.shadow{width:min(200px,50vw);height:16px;border-radius:50%;background:rgba(255,107,157,.3);margin-top:-6px}
-/* cards */
-.card{background:var(--card);border-radius:30px;max-width:560px;margin:34px auto;padding:30px 26px;text-align:center;
-box-shadow:0 8px 0 #ffb3cf,0 18px 30px rgba(255,107,157,.25);position:relative}
-.card::before{content:"🎀";position:absolute;top:-22px;left:50%;margin-left:-20px;font-size:38px}
-.card h2{font-family:"Pacifico",cursive;font-weight:400;color:var(--pink);margin:10px 0 12px;font-size:1.6rem}
-.card p{line-height:1.7;font-size:1.08rem;margin:8px 0}
-.sign{font-weight:600;color:var(--pink)}
-.wishes{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
-.wishes .pill{font-size:.9rem}
-/* cake */
-#cake{touch-action:manipulation;display:block;margin:10px auto;width:200px;cursor:pointer}
-.flame{transform-origin:50% 100%;animation:flick .25s infinite alternate;transform-box:fill-box}
-@keyframes flick{to{transform:scale(1.15,.9) rotate(4deg)}}
-#cake.out .flame{display:none}
-/* effects */
-.balloon{position:fixed;bottom:-130px;width:64px;height:82px;border-radius:50% 50% 50% 50%/55% 55% 45% 45%;cursor:pointer;z-index:8;
-box-shadow:inset -8px -8px 0 rgba(0,0,0,.08),inset 8px 8px 0 rgba(255,255,255,.4);animation:up linear forwards;touch-action:manipulation}
-.balloon::after{content:"";position:absolute;top:100%;left:50%;width:2px;height:70px;background:rgba(74,35,56,.35)}
-@keyframes up{to{transform:translateY(-135vh) rotate(8deg)}}
-.balloon.pop{animation:none;transform:scale(1.7);opacity:0;transition:.2s}
-.fx{position:fixed;pointer-events:none;z-index:50;font-size:22px;animation:fl 1.3s ease-out forwards}
-@keyframes fl{to{transform:translateY(-90px) scale(1.5);opacity:0}}
-#conf{position:fixed;inset:0;pointer-events:none;z-index:60}
-footer{text-align:center;opacity:.7;padding:14px;font-size:.9rem}
-@media (max-width:600px){
-.bar{left:8px;right:8px;justify-content:center;gap:6px}.pill{font-size:.85rem;padding:8px 12px}
-main{padding-top:calc(96px + env(safe-area-inset-top,0px))}.card{margin:40px auto;padding:26px 18px}
-.balloon{width:54px;height:70px}}
-@media (max-height:500px) and (orientation:landscape){main{padding-top:70px}.stage{min-height:0}#kitty{width:200px}}
-@media (min-width:1100px){#kitty{width:340px}h1{font-size:5rem}}
-@media (prefers-reduced-motion:reduce){#kitty,#bow,.balloon,#bg span,#gate .gift{animation:none}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Happy Birthday! 🎀</title>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Pacifico&display=swap">
+  <style>
+    :root {
+      --bg1: #fff5f9;
+      --bg2: #ffd3e3;
+      --pink: #ff6b9d;
+      --red: #ff3b6b;
+      --ink: #4a2338;
+      --card: #fff;
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px)
+    }
+
+    @media (prefers-color-scheme:dark) {
+      :root:not([data-theme="light"]) {
+        --bg1: #3a1a2c;
+        --bg2: #5a2540;
+        --ink: #ffe3ee;
+        --card: #4a2036
+      }
+    }
+
+    html {
+      background: var(--bg2);
+      scroll-padding-top: env(safe-area-inset-top, 0px)
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font-family: "Fredoka", "Trebuchet MS", sans-serif;
+      color: var(--ink);
+      min-height: 100%;
+      overflow-x: hidden;
+      background: radial-gradient(circle at 20% 10%, #fff 0 6%, transparent 7%), var(--bg1);
+      background: linear-gradient(180deg, var(--bg1), var(--bg2));
+      -webkit-tap-highlight-color: transparent;
+      -webkit-text-size-adjust: 100%;
+      min-height: 100vh;
+      min-height: 100dvh
+    }
+
+    #bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden
+    }
+
+    #bg span {
+      position: absolute;
+      bottom: -40px;
+      opacity: .6;
+      animation: rise linear infinite
+    }
+
+    @keyframes rise {
+      to {
+        transform: translateY(-115vh) rotate(30deg)
+      }
+    }
+
+    /* gate */
+    #gate {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      background: linear-gradient(180deg, var(--bg1), var(--bg2));
+      cursor: pointer;
+      text-align: center;
+      padding: 20px;
+      transition: opacity .7s, transform .7s
+    }
+
+    #gate.out {
+      opacity: 0;
+      transform: scale(1.15);
+      pointer-events: none
+    }
+
+    #gate .gift {
+      font-size: 96px;
+      animation: bob 1.4s ease-in-out infinite;
+      filter: drop-shadow(0 10px 12px rgba(255, 59, 107, .35))
+    }
+
+    #gate h2 {
+      font-family: "Pacifico", cursive;
+      font-weight: 400;
+      font-size: clamp(1.6rem, 6vw, 2.4rem);
+      color: var(--pink)
+    }
+
+    #gate p {
+      opacity: .8
+    }
+
+    @keyframes bob {
+      50% {
+        transform: translateY(-14px) rotate(6deg)
+      }
+    }
+
+    /* toolbar */
+    .bar {
+      position: fixed;
+      top: calc(12px + env(safe-area-inset-top, 0px));
+      right: 12px;
+      display: flex;
+      gap: 8px;
+      z-index: 20;
+      flex-wrap: wrap;
+      justify-content: flex-end
+    }
+
+    .pill {
+      touch-action: manipulation;
+      min-height: 42px;
+      border: 0;
+      background: var(--card);
+      color: var(--ink);
+      font: inherit;
+      font-size: .95rem;
+      padding: 9px 15px;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #ffb3cf, 0 8px 16px rgba(255, 107, 157, .25);
+      transition: transform .15s
+    }
+
+    .pill:hover {
+      transform: translateY(-2px)
+    }
+
+    .pill:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #ffb3cf
+    }
+
+    .pill:focus-visible,
+    #kitty:focus-visible {
+      outline: 3px solid var(--red);
+      outline-offset: 3px
+    }
+
+    main {
+      position: relative;
+      z-index: 2;
+      display: none;
+      padding: 64px 16px 30px
+    }
+
+    main.show {
+      display: block
+    }
+
+    h1 {
+      font-family: "Pacifico", cursive;
+      font-weight: 400;
+      text-align: center;
+      font-size: clamp(2.2rem, 9vw, 4.4rem);
+      color: var(--pink);
+      line-height: 1.15;
+      text-shadow: 0 3px 0 #fff, 0 6px 0 rgba(255, 107, 157, .25);
+      animation: pop .9s cubic-bezier(.3, 1.6, .5, 1)
+    }
+
+    h1 small {
+      display: block;
+      font-family: "Fredoka", sans-serif;
+      font-size: clamp(1rem, 3.5vw, 1.3rem);
+      color: var(--ink);
+      text-shadow: none;
+      margin-top: 6px
+    }
+
+    @keyframes pop {
+      from {
+        transform: scale(.3);
+        opacity: 0
+      }
+    }
+
+    .hint {
+      text-align: center;
+      margin: 12px auto 0;
+      opacity: .75;
+      max-width: 420px;
+      font-size: .95rem
+    }
+
+    /* stage */
+    .stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 22px;
+      min-height: 340px
+    }
+
+    #bubble {
+      background: var(--card);
+      border-radius: 22px;
+      padding: 10px 18px;
+      font-size: 1rem;
+      max-width: 260px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 5px 0 #ffb3cf;
+      margin-bottom: 16px
+    }
+
+    #bubble::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -12px;
+      margin-left: -10px;
+      border: 10px solid transparent;
+      border-top-color: var(--card);
+      border-bottom: 0
+    }
+
+    #kitty {
+      width: min(300px, 78vw);
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+      position: relative;
+      z-index: 6;
+      filter: drop-shadow(0 14px 14px rgba(255, 107, 157, .35));
+      animation: idle 3s ease-in-out infinite;
+      transform-origin: 50% 100%
+    }
+
+    #kitty:active {
+      cursor: grabbing
+    }
+
+    @keyframes idle {
+      50% {
+        transform: translateY(-6px) rotate(-1.5deg)
+      }
+    }
+
+    @keyframes jump {
+
+      40%,
+      60% {
+        transform: translateY(-60px) scale(1.06, .94)
+      }
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    @keyframes wave {
+      25% {
+        transform: rotate(-35deg)
+      }
+
+      75% {
+        transform: rotate(15deg)
+      }
+    }
+
+    #kitty.jumping {
+      animation: jump .6s ease
+    }
+
+    #kitty.spinning {
+      animation: spin .8s ease
+    }
+
+    #kitty.waving #arm-r {
+      transform-box: fill-box;
+      transform-origin: 20% 80%;
+      animation: wave .5s 3
+    }
+
+    #bow {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: wig 2.4s ease-in-out infinite
+    }
+
+    @keyframes wig {
+      50% {
+        transform: rotate(7deg)
+      }
+    }
+
+    .eye {
+      animation: blink 4.2s infinite;
+      transform-box: fill-box;
+      transform-origin: center
+    }
+
+    @keyframes blink {
+
+      0%,
+      93%,
+      100% {
+        transform: scaleY(1)
+      }
+
+      96% {
+        transform: scaleY(.1)
+      }
+    }
+
+    .shadow {
+      width: min(200px, 50vw);
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(255, 107, 157, .3);
+      margin-top: -6px
+    }
+
+    /* cards */
+    .card {
+      background: var(--card);
+      border-radius: 30px;
+      max-width: 560px;
+      margin: 34px auto;
+      padding: 30px 26px;
+      text-align: center;
+      box-shadow: 0 8px 0 #ffb3cf, 0 18px 30px rgba(255, 107, 157, .25);
+      position: relative
+    }
+
+    .card::before {
+      content: "🎀";
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      margin-left: -20px;
+      font-size: 38px
+    }
+
+    .card h2 {
+      font-family: "Pacifico", cursive;
+      font-weight: 400;
+      color: var(--pink);
+      margin: 10px 0 12px;
+      font-size: 1.6rem
+    }
+
+    .card p {
+      line-height: 1.7;
+      font-size: 1.08rem;
+      margin: 8px 0
+    }
+
+    .sign {
+      font-weight: 600;
+      color: var(--pink)
+    }
+
+    .wishes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 14px
+    }
+
+    .wishes .pill {
+      font-size: .9rem
+    }
+
+    /* cake */
+    #cake {
+      touch-action: manipulation;
+      display: block;
+      margin: 10px auto;
+      width: 200px;
+      cursor: pointer
+    }
+
+    .flame {
+      transform-origin: 50% 100%;
+      animation: flick .25s infinite alternate;
+      transform-box: fill-box
+    }
+
+    @keyframes flick {
+      to {
+        transform: scale(1.15, .9) rotate(4deg)
+      }
+    }
+
+    #cake.out .flame {
+      display: none
+    }
+
+    /* effects */
+    .balloon {
+      position: fixed;
+      bottom: -130px;
+      width: 64px;
+      height: 82px;
+      border-radius: 50% 50% 50% 50%/55% 55% 45% 45%;
+      cursor: pointer;
+      z-index: 8;
+      box-shadow: inset -8px -8px 0 rgba(0, 0, 0, .08), inset 8px 8px 0 rgba(255, 255, 255, .4);
+      animation: up linear forwards;
+      touch-action: manipulation
+    }
+
+    .balloon::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      width: 2px;
+      height: 70px;
+      background: rgba(74, 35, 56, .35)
+    }
+
+    @keyframes up {
+      to {
+        transform: translateY(-135vh) rotate(8deg)
+      }
+    }
+
+    .balloon.pop {
+      animation: none;
+      transform: scale(1.7);
+      opacity: 0;
+      transition: .2s
+    }
+
+    .fx {
+      position: fixed;
+      pointer-events: none;
+      z-index: 50;
+      font-size: 22px;
+      animation: fl 1.3s ease-out forwards
+    }
+
+    @keyframes fl {
+      to {
+        transform: translateY(-90px) scale(1.5);
+        opacity: 0
+      }
+    }
+
+    #conf {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 60
+    }
+
+    footer {
+      text-align: center;
+      opacity: .7;
+      padding: 14px;
+      font-size: .9rem
+    }
+
+    @media (max-width:600px) {
+      .bar {
+        left: 8px;
+        right: 8px;
+        justify-content: center;
+        gap: 6px
+      }
+
+      .pill {
+        font-size: .85rem;
+        padding: 8px 12px
+      }
+
+      main {
+        padding-top: calc(96px + env(safe-area-inset-top, 0px))
+      }
+
+      .card {
+        margin: 40px auto;
+        padding: 26px 18px
+      }
+
+      .balloon {
+        width: 54px;
+        height: 70px
+      }
+    }
+
+    @media (max-height:500px) and (orientation:landscape) {
+      main {
+        padding-top: 70px
+      }
+
+      .stage {
+        min-height: 0
+      }
+
+      #kitty {
+        width: 200px
+      }
+    }
+
+    @media (min-width:1100px) {
+      #kitty {
+        width: 340px
+      }
+
+      h1 {
+        font-size: 5rem
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+
+      #kitty,
+      #bow,
+      .balloon,
+      #bg span,
+      #gate .gift {
+        animation: none
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div id="bg"></div>
+  <div id="bg"></div>
 
-<div id="gate" role="button" tabindex="0" aria-label="Open your gift">
-  <div class="gift">🎁</div>
-  <h2>Something pink is waiting…</h2>
-  <p>tap anywhere to open (turn your sound on 🎶)</p>
-</div>
+  <div id="gate" role="button" tabindex="0" aria-label="Open your gift">
+    <div class="gift">🎁</div>
+    <h2>Something pink is waiting…</h2>
+    <p>tap anywhere to open (turn your sound on 🎶)</p>
+  </div>
 
-<div class="bar">
-  <button class="pill" id="mus">🎵 Music</button>
-  <button class="pill" id="cbtn">🎉 Confetti</button>
-  <button class="pill" id="bbtn">🎈 Balloons</button>
-</div>
+  <div class="bar">
+    <button class="pill" id="mus">🎵 Music</button>
+    <button class="pill" id="cbtn">🎉 Confetti</button>
+    <button class="pill" id="bbtn">🎈 Balloons</button>
+  </div>
 
-<main id="main">
-  <h1 id="title"></h1>
-  <p class="hint">poke, hug, drag or spin Kitty • pop the balloons • make a wish 🎂</p>
+  <main id="main">
+    <h1 id="title"></h1>
+    <p class="hint">poke, hug, drag or spin Kitty • pop the balloons • make a wish 🎂</p>
 
-  <section class="stage">
-    <div id="bubble">hi hi hi! 💕</div>
-    <svg id="kitty" viewBox="0 0 240 270" tabindex="0" role="img" aria-label="Hello Kitty. Click her!">
-      <!-- body -->
-      <path d="M86 176 Q70 250 92 256 L148 256 Q170 250 154 176 Z" fill="#ff9cc3" stroke="#4a2338" stroke-width="4" stroke-linejoin="round"/>
-      <path d="M120 218c-6-9-18-4-14 5 3 6 14 10 14 10s11-4 14-10c4-9-8-14-14-5z" fill="#fff"/>
-      <ellipse cx="92" cy="258" rx="20" ry="10" fill="#fff" stroke="#4a2338" stroke-width="4"/>
-      <ellipse cx="148" cy="258" rx="20" ry="10" fill="#fff" stroke="#4a2338" stroke-width="4"/>
-      <ellipse cx="76" cy="205" rx="12" ry="20" transform="rotate(25 76 205)" fill="#fff" stroke="#4a2338" stroke-width="4"/>
-      <ellipse id="arm-r" cx="166" cy="205" rx="12" ry="20" transform="rotate(-25 166 205)" fill="#fff" stroke="#4a2338" stroke-width="4"/>
-      <!-- ears -->
-      <path d="M40 86 Q30 28 62 30 Q92 38 100 70 Z" fill="#fff" stroke="#4a2338" stroke-width="4" stroke-linejoin="round"/>
-      <path d="M200 86 Q210 28 178 30 Q148 38 140 70 Z" fill="#fff" stroke="#4a2338" stroke-width="4" stroke-linejoin="round"/>
-      <!-- head -->
-      <ellipse cx="120" cy="118" rx="94" ry="68" fill="#fff" stroke="#4a2338" stroke-width="4"/>
-      <!-- bow -->
-      <g id="bow" stroke="#4a2338" stroke-width="3.5" stroke-linejoin="round">
-        <path d="M176 44 Q150 12 148 44 Q150 74 176 44z" fill="#ff3b6b"/>
-        <path d="M176 44 Q205 14 214 40 Q212 76 176 44z" fill="#ff3b6b"/>
-        <circle cx="176" cy="44" r="9" fill="#ff7a9e"/>
-      </g>
-      <!-- face -->
-      <g id="eyes"><ellipse class="eye" cx="82" cy="122" rx="7" ry="9" fill="#2a1420"/><ellipse class="eye" cx="158" cy="122" rx="7" ry="9" fill="#2a1420"/></g>
-      <ellipse cx="62" cy="140" rx="12" ry="7" fill="#ffb3cf" opacity=".6"/><ellipse cx="178" cy="140" rx="12" ry="7" fill="#ffb3cf" opacity=".6"/>
-      <ellipse cx="120" cy="136" rx="10" ry="6.5" fill="#ffd23a" stroke="#4a2338" stroke-width="3"/>
-      <g stroke="#2a1420" stroke-width="3.5" stroke-linecap="round">
-        <path d="M14 112l44 6M10 132h46M14 152l44-8"/><path d="M226 112l-44 6M230 132h-46M226 152l-44-8"/>
-      </g>
-    </svg>
-    <div class="shadow"></div>
-  </section>
+    <section class="stage">
+      <div id="bubble">hi hi hi! 💕</div>
+      <svg id="kitty" viewBox="0 0 240 270" tabindex="0" role="img" aria-label="Hello Kitty. Click her!">
+        <!-- body -->
+        <path d="M86 176 Q70 250 92 256 L148 256 Q170 250 154 176 Z" fill="#ff9cc3" stroke="#4a2338" stroke-width="4"
+          stroke-linejoin="round" />
+        <path d="M120 218c-6-9-18-4-14 5 3 6 14 10 14 10s11-4 14-10c4-9-8-14-14-5z" fill="#fff" />
+        <ellipse cx="92" cy="258" rx="20" ry="10" fill="#fff" stroke="#4a2338" stroke-width="4" />
+        <ellipse cx="148" cy="258" rx="20" ry="10" fill="#fff" stroke="#4a2338" stroke-width="4" />
+        <ellipse cx="76" cy="205" rx="12" ry="20" transform="rotate(25 76 205)" fill="#fff" stroke="#4a2338"
+          stroke-width="4" />
+        <ellipse id="arm-r" cx="166" cy="205" rx="12" ry="20" transform="rotate(-25 166 205)" fill="#fff"
+          stroke="#4a2338" stroke-width="4" />
+        <!-- ears -->
+        <path d="M40 86 Q30 28 62 30 Q92 38 100 70 Z" fill="#fff" stroke="#4a2338" stroke-width="4"
+          stroke-linejoin="round" />
+        <path d="M200 86 Q210 28 178 30 Q148 38 140 70 Z" fill="#fff" stroke="#4a2338" stroke-width="4"
+          stroke-linejoin="round" />
+        <!-- head -->
+        <ellipse cx="120" cy="118" rx="94" ry="68" fill="#fff" stroke="#4a2338" stroke-width="4" />
+        <!-- bow -->
+        <g id="bow" stroke="#4a2338" stroke-width="3.5" stroke-linejoin="round">
+          <path d="M176 44 Q150 12 148 44 Q150 74 176 44z" fill="#ff3b6b" />
+          <path d="M176 44 Q205 14 214 40 Q212 76 176 44z" fill="#ff3b6b" />
+          <circle cx="176" cy="44" r="9" fill="#ff7a9e" />
+        </g>
+        <!-- face -->
+        <g id="eyes">
+          <ellipse class="eye" cx="82" cy="122" rx="7" ry="9" fill="#2a1420" />
+          <ellipse class="eye" cx="158" cy="122" rx="7" ry="9" fill="#2a1420" />
+        </g>
+        <ellipse cx="62" cy="140" rx="12" ry="7" fill="#ffb3cf" opacity=".6" />
+        <ellipse cx="178" cy="140" rx="12" ry="7" fill="#ffb3cf" opacity=".6" />
+        <ellipse cx="120" cy="136" rx="10" ry="6.5" fill="#ffd23a" stroke="#4a2338" stroke-width="3" />
+        <g stroke="#2a1420" stroke-width="3.5" stroke-linecap="round">
+          <path d="M14 112l44 6M10 132h46M14 152l44-8" />
+          <path d="M226 112l-44 6M230 132h-46M226 152l-44-8" />
+        </g>
+      </svg>
+      <div class="shadow"></div>
+    </section>
 
-  <section class="card">
-    <h2 id="ctitle"></h2><p id="cbody"></p><p class="sign" id="csign"></p>
-  </section>
+    <section class="card">
+      <h2 id="ctitle"></h2>
+      <p id="cbody"></p>
+      <p class="sign" id="csign"></p>
+    </section>
 
-  <section class="card">
-    <h2>Make a wish!</h2>
-    <svg id="cake" viewBox="0 0 200 170" role="button" aria-label="Blow out the candles">
-      <g id="candles"></g>
-      <rect x="30" y="80" width="140" height="40" rx="10" fill="#ffc2d8" stroke="#4a2338" stroke-width="3.5"/>
-      <path d="M30 92q12 14 24 0t24 0 24 0 24 0 24 0 22 0" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
-      <rect x="14" y="120" width="172" height="38" rx="12" fill="#ff8fb8" stroke="#4a2338" stroke-width="3.5"/>
-      <circle cx="60" cy="139" r="5" fill="#fff"/><circle cx="100" cy="139" r="5" fill="#fff"/><circle cx="140" cy="139" r="5" fill="#fff"/>
-    </svg>
-    <p id="wishline">Tap the cake to blow out the candles 🕯️</p>
-  </section>
-  <footer>made with 💗 just for you · <span id="yr"></span></footer>
-</main>
-<canvas id="conf"></canvas>
+    <section class="card">
+      <h2>Make a wish!</h2>
+      <svg id="cake" viewBox="0 0 200 170" role="button" aria-label="Blow out the candles">
+        <g id="candles"></g>
+        <rect x="30" y="80" width="140" height="40" rx="10" fill="#ffc2d8" stroke="#4a2338" stroke-width="3.5" />
+        <path d="M30 92q12 14 24 0t24 0 24 0 24 0 24 0 22 0" fill="none" stroke="#fff" stroke-width="7"
+          stroke-linecap="round" />
+        <rect x="14" y="120" width="172" height="38" rx="12" fill="#ff8fb8" stroke="#4a2338" stroke-width="3.5" />
+        <circle cx="60" cy="139" r="5" fill="#fff" />
+        <circle cx="100" cy="139" r="5" fill="#fff" />
+        <circle cx="140" cy="139" r="5" fill="#fff" />
+      </svg>
+      <p id="wishline">Tap the cake to blow out the candles 🕯️</p>
+    </section>
+    <footer>made with 💗 just for you</footer>
+  </main>
+  <canvas id="conf"></canvas>
 
-<script>
-/* ===== EDIT ME ===== */
-const CFG = {
-  name: "Bestie",
-  tagline: "today is all about YOU ✨",
-  cardTitle: "A little note for you",
-  cardBody: "Write your own message here! Tell her how amazing she is, bring up a funny memory, and wish her the best year ever. (Edit this text in the CFG block at the top of the script.)",
-  sign: "— with love, from me 💋",
-  balloons: 8
-};
-/* =================== */
-const $=s=>document.querySelector(s), rnd=n=>Math.random()*n, pick=a=>a[(rnd(a.length))|0];
-$("#title").innerHTML="Happy Birthday,<br>"+CFG.name+"! 🎀<small>"+CFG.tagline+"</small>";
-$("#ctitle").textContent=CFG.cardTitle;$("#cbody").textContent=CFG.cardBody;$("#csign").textContent=CFG.sign;
-$("#yr").textContent=new Date().getFullYear();
+  <script>
+    /* ===== EDIT ME ===== */
+    const CFG = {
+      name: "Bestie",
+      tagline: "today is all about YOU ✨",
+      cardTitle: "A little note for you",
+      cardBody: " Tell her how amazing she is, bring up a funny memory, and wish her the best year ever. (Edit this text in the CFG block at the top of the script.)",
+      sign: "— with love, from me 💋",
+      balloons: 8
+    };
+    /* =================== */
+    const $ = s => document.querySelector(s), rnd = n => Math.random() * n, pick = a => a[(rnd(a.length)) | 0];
+    $("#title").innerHTML = "Happy Birthday,<br>" + CFG.name + "! 🎀<small>" + CFG.tagline + "</small>";
+    $("#ctitle").textContent = CFG.cardTitle; $("#cbody").textContent = CFG.cardBody; $("#csign").textContent = CFG.sign;
 
-/* background floaties */
-const bg=$("#bg");
-for(let i=0;i<20;i++){const s=document.createElement("span");s.textContent=["🎀","💗","✨","🌸","⭐"][i%5];
-s.style.left=rnd(100)+"vw";s.style.fontSize=14+rnd(20)+"px";s.style.animationDuration=10+rnd(14)+"s";s.style.animationDelay=-rnd(24)+"s";bg.appendChild(s)}
+    /* background floaties */
+    const bg = $("#bg");
+    for (let i = 0; i < 20; i++) {
+      const s = document.createElement("span"); s.textContent = ["🎀", "💗", "✨", "🌸", "⭐"][i % 5];
+      s.style.left = rnd(100) + "vw"; s.style.fontSize = 14 + rnd(20) + "px"; s.style.animationDuration = 10 + rnd(14) + "s"; s.style.animationDelay = -rnd(24) + "s"; bg.appendChild(s)
+    }
 
-/* candles */
-const cg=$("#candles");
-[60,100,140].forEach(x=>{cg.insertAdjacentHTML("beforeend",
-`<rect x="${x-4}" y="48" width="8" height="32" rx="3" fill="#fff" stroke="#4a2338" stroke-width="2.5"/><path class="flame" d="M${x} 24q-9 12 0 22q9-10 0-22z" fill="#ffd23a" stroke="#ff8a3d" stroke-width="2"/>`)});
+    /* candles */
+    const cg = $("#candles");
+    [60, 100, 140].forEach(x => {
+      cg.insertAdjacentHTML("beforeend",
+        `<rect x="${x - 4}" y="48" width="8" height="32" rx="3" fill="#fff" stroke="#4a2338" stroke-width="2.5"/><path class="flame" d="M${x} 24q-9 12 0 22q9-10 0-22z" fill="#ffd23a" stroke="#ff8a3d" stroke-width="2"/>`)
+    });
 
-/* ---- sound ---- */
-let AC=null;const ac=()=>AC||(AC=new (window.AudioContext||window.webkitAudioContext)());
-function tone(f,t,d,v=.12,type="sine"){const a=ac(),o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.value=f;
-g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+d);
-o.connect(g).connect(a.destination);o.start(t);o.stop(t+d+.05)}
-function blip(a,b,d,type="sine",v=.12){const c=ac(),o=c.createOscillator(),g=c.createGain();o.type=type;
-o.frequency.setValueAtTime(a,c.currentTime);o.frequency.exponentialRampToValueAtTime(b,c.currentTime+d);
-g.gain.setValueAtTime(v,c.currentTime);g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+d);o.connect(g).connect(c.destination);o.start();o.stop(c.currentTime+d)}
-const giggle=()=>{blip(700,1300,.12,"triangle");setTimeout(()=>blip(900,1500,.12,"triangle"),130)};
-const popS=()=>blip(500,70,.12,"sawtooth",.2), ping=()=>blip(1000,1600,.12,"triangle",.08);
+    /* ---- sound ---- */
+    let AC = null; const ac = () => AC || (AC = new (window.AudioContext || window.webkitAudioContext)());
+    function tone(f, t, d, v = .12, type = "sine") {
+      const a = ac(), o = a.createOscillator(), g = a.createGain(); o.type = type; o.frequency.value = f;
+      g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(v, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + d);
+      o.connect(g).connect(a.destination); o.start(t); o.stop(t + d + .05)
+    }
+    function blip(a, b, d, type = "sine", v = .12) {
+      const c = ac(), o = c.createOscillator(), g = c.createGain(); o.type = type;
+      o.frequency.setValueAtTime(a, c.currentTime); o.frequency.exponentialRampToValueAtTime(b, c.currentTime + d);
+      g.gain.setValueAtTime(v, c.currentTime); g.gain.exponentialRampToValueAtTime(.0001, c.currentTime + d); o.connect(g).connect(c.destination); o.start(); o.stop(c.currentTime + d)
+    }
+    const giggle = () => { blip(700, 1300, .12, "triangle"); setTimeout(() => blip(900, 1500, .12, "triangle"), 130) };
+    const popS = () => blip(500, 70, .12, "sawtooth", .2), ping = () => blip(1000, 1600, .12, "triangle", .08);
 
-/* music box: Happy Birthday, loops */
-const M=[[392,.75],[392,.25],[440,1],[392,1],[523,1],[494,2],[392,.75],[392,.25],[440,1],[392,1],[587,1],[523,2],
-[392,.75],[392,.25],[784,1],[659,1],[523,1],[494,1],[440,1],[698,.75],[698,.25],[659,1],[523,1],[587,1],[523,2],[0,2]];
-const B=.42;let playing=false,mi=0,nt=0,mt=null;
-function sched(){const a=ac();while(nt<a.currentTime+.4){const[f,b]=M[mi];
-if(f){tone(f,nt,.9,.11);tone(f*2,nt,.5,.035)}nt+=B*b;mi=(mi+1)%M.length}mt=setTimeout(sched,100)}
-function startM(){if(playing)return;const a=ac();if(a.state==="suspended")a.resume();mi=0;nt=a.currentTime+.1;sched();playing=true;$("#mus").textContent="⏸ Pause"}
-function stopM(){clearTimeout(mt);playing=false;$("#mus").textContent="🎵 Music"}
-$("#mus").onclick=()=>playing?stopM():startM();
+    /* music box: Happy Birthday, loops */
+    const M = [[392, .75], [392, .25], [440, 1], [392, 1], [523, 1], [494, 2], [392, .75], [392, .25], [440, 1], [392, 1], [587, 1], [523, 2],
+    [392, .75], [392, .25], [784, 1], [659, 1], [523, 1], [494, 1], [440, 1], [698, .75], [698, .25], [659, 1], [523, 1], [587, 1], [523, 2], [0, 2]];
+    const B = .42; let playing = false, mi = 0, nt = 0, mt = null;
+    function sched() {
+      const a = ac(); while (nt < a.currentTime + .4) {
+        const [f, b] = M[mi];
+        if (f) { tone(f, nt, .9, .11); tone(f * 2, nt, .5, .035) } nt += B * b; mi = (mi + 1) % M.length
+      } mt = setTimeout(sched, 100)
+    }
+    function startM() { if (playing) return; const a = ac(); if (a.state === "suspended") a.resume(); mi = 0; nt = a.currentTime + .1; sched(); playing = true; $("#mus").textContent = "⏸ Pause" }
+    function stopM() { clearTimeout(mt); playing = false; $("#mus").textContent = "🎵 Music" }
+    $("#mus").onclick = () => playing ? stopM() : startM();
 
-document.addEventListener("visibilitychange",()=>{if(!document.hidden&&playing&&AC&&AC.state!=="running")AC.resume()});
-/* ---- confetti ---- */
-const cv=$("#conf"),cx=cv.getContext("2d");let P=[],run=false;
-const size=()=>{cv.width=innerWidth;cv.height=innerHeight};size();addEventListener("resize",size);
-function confetti(n=140){const C=["#ff6b9d","#ffd23a","#8be0d4","#c3a6ff","#fff","#ff3b6b"];
-for(let i=0;i<n;i++)P.push({x:rnd(cv.width),y:-20,w:6+rnd(8),h:8+rnd(8),c:pick(C),vy:2+rnd(4),vx:rnd(3)-1.5,r:rnd(6),vr:rnd(.3)-.15});
-if(!run){run=true;tick()}}
-function tick(){cx.clearRect(0,0,cv.width,cv.height);P=P.filter(p=>p.y<cv.height+30);
-for(const p of P){p.y+=p.vy;p.x+=p.vx;p.r+=p.vr;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.fillRect(-p.w/2,-p.h/2,p.w,p.h);cx.restore()}
-P.length?requestAnimationFrame(tick):(run=false,cx.clearRect(0,0,cv.width,cv.height))}
-$("#cbtn").onclick=()=>{confetti();giggle()};
+    document.addEventListener("visibilitychange", () => { if (!document.hidden && playing && AC && AC.state !== "running") AC.resume() });
+    /* ---- confetti ---- */
+    const cv = $("#conf"), cx = cv.getContext("2d"); let P = [], run = false;
+    const size = () => { cv.width = innerWidth; cv.height = innerHeight }; size(); addEventListener("resize", size);
+    function confetti(n = 140) {
+      const C = ["#ff6b9d", "#ffd23a", "#8be0d4", "#c3a6ff", "#fff", "#ff3b6b"];
+      for (let i = 0; i < n; i++)P.push({ x: rnd(cv.width), y: -20, w: 6 + rnd(8), h: 8 + rnd(8), c: pick(C), vy: 2 + rnd(4), vx: rnd(3) - 1.5, r: rnd(6), vr: rnd(.3) - .15 });
+      if (!run) { run = true; tick() }
+    }
+    function tick() {
+      cx.clearRect(0, 0, cv.width, cv.height); P = P.filter(p => p.y < cv.height + 30);
+      for (const p of P) { p.y += p.vy; p.x += p.vx; p.r += p.vr; cx.save(); cx.translate(p.x, p.y); cx.rotate(p.r); cx.fillStyle = p.c; cx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); cx.restore() }
+      P.length ? requestAnimationFrame(tick) : (run = false, cx.clearRect(0, 0, cv.width, cv.height))
+    }
+    $("#cbtn").onclick = () => { confetti(); giggle() };
 
-/* ---- floaty emojis ---- */
-function fx(x,y,ch){const d=document.createElement("div");d.className="fx";d.textContent=ch;d.style.left=x+"px";d.style.top=y+"px";document.body.appendChild(d);setTimeout(()=>d.remove(),1400)}
-const K=$("#kitty");
-function hearts(n=7){const r=K.getBoundingClientRect();for(let i=0;i<n;i++)fx(r.left+rnd(r.width),r.top+rnd(r.height*.6),pick(["💗","💕","🎀","✨","💖"]))}
+    /* ---- floaty emojis ---- */
+    function fx(x, y, ch) { const d = document.createElement("div"); d.className = "fx"; d.textContent = ch; d.style.left = x + "px"; d.style.top = y + "px"; document.body.appendChild(d); setTimeout(() => d.remove(), 1400) }
+    const K = $("#kitty");
+    function hearts(n = 7) { const r = K.getBoundingClientRect(); for (let i = 0; i < n; i++)fx(r.left + rnd(r.width), r.top + rnd(r.height * .6), pick(["💗", "💕", "🎀", "✨", "💖"])) }
 
-/* ---- kitty ---- */
-const T={hover:["hehe hi!! 💕","you found me! 🎀","ooh a visitor!"],poke:["hehe! again!! 💗","yaaay! 🎉","you’re my fave! 💖","kyaa~ that tickles!"],
-spin:["wheeeee!! 💫","i’m dizzy~ 😵‍💫"],drag:["where are we going? 🚗","wheee! 🌈"],hug:["*hugs you back* 🤗"],idle:["make a wish! 🎂","pop the balloons! 🎈","you’re so special 💗","happy birthday!! 🎉"]};
-const say=t=>{const b=$("#bubble");b.textContent=t;b.animate([{transform:"scale(.6)"},{transform:"scale(1)"}],{duration:220})};
-const flash=(c,ms)=>{K.classList.remove(c);void K.getBoundingClientRect();K.classList.add(c);setTimeout(()=>K.classList.remove(c),ms)};
-K.addEventListener("mouseenter",()=>{flash("waving",1500);say(pick(T.hover))});
-let lastTap=0,dragging=false,moved=0,ox=0,oy=0,sx=0,sy=0,tx=0,ty=0;
-K.addEventListener("pointerdown",e=>{dragging=true;moved=0;sx=e.clientX;sy=e.clientY;K.setPointerCapture(e.pointerId)});
-addEventListener("pointermove",e=>{
-  if(dragging){tx=ox+e.clientX-sx;ty=oy+e.clientY-sy;moved=Math.max(moved,Math.hypot(e.clientX-sx,e.clientY-sy));K.style.translate=tx+"px "+ty+"px"}
-  const r=$("#eyes").getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),d=Math.hypot(dx,dy)||1,m=Math.min(5,d/40);
-  $("#eyes").style.transform=`translate(${dx/d*m}px,${dy/d*m}px)`;
-  if(Math.random()<.12&&!dragging)fx(e.clientX,e.clientY,pick(["✨","💗"]))});
-addEventListener("pointercancel",()=>{dragging=false;K.style.translate="0 0"});
-addEventListener("pointerup",()=>{if(!dragging)return;dragging=false;ox=tx;oy=ty;
-  if(moved>40){say(pick(T.drag));giggle()}else{const n=Date.now();
-    if(n-lastTap<350){flash("spinning",800);confetti(70);say(pick(T.spin));lastTap=0}
-    else{flash("jumping",650);hearts();giggle();say(pick(T.poke));lastTap=n}}
-  K.style.translate="0 0";ox=oy=tx=ty=0});
-K.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flash("jumping",650);hearts();giggle();say(pick(T.poke))}});
-addEventListener("keydown",e=>{if(e.key.length===1&&$("#main").classList.contains("show")){ping();const r=K.getBoundingClientRect();fx(r.left+rnd(r.width),r.top,pick(["✨","💗","🎀"]))}});
-setInterval(()=>{if($("#main").classList.contains("show")&&!dragging)say(pick(T.idle))},9000);
+    /* ---- kitty ---- */
+    const T = {
+      hover: ["hehe hi!! 💕", "you found me! 🎀", "ooh a visitor!"], poke: ["hehe! again!! 💗", "yaaay! 🎉", "you’re my fave! 💖", "kyaa~ that tickles!"],
+      spin: ["wheeeee!! 💫", "i’m dizzy~ 😵‍💫"], drag: ["where are we going? 🚗", "wheee! 🌈"], hug: ["*hugs you back* 🤗"], idle: ["make a wish! 🎂", "pop the balloons! 🎈", "you’re so special 💗", "happy birthday!! 🎉"]
+    };
+    const say = t => { const b = $("#bubble"); b.textContent = t; b.animate([{ transform: "scale(.6)" }, { transform: "scale(1)" }], { duration: 220 }) };
+    const flash = (c, ms) => { K.classList.remove(c); void K.getBoundingClientRect(); K.classList.add(c); setTimeout(() => K.classList.remove(c), ms) };
+    K.addEventListener("mouseenter", () => { flash("waving", 1500); say(pick(T.hover)) });
+    let lastTap = 0, dragging = false, moved = 0, ox = 0, oy = 0, sx = 0, sy = 0, tx = 0, ty = 0;
+    K.addEventListener("pointerdown", e => { dragging = true; moved = 0; sx = e.clientX; sy = e.clientY; K.setPointerCapture(e.pointerId) });
+    addEventListener("pointermove", e => {
+      if (dragging) { tx = ox + e.clientX - sx; ty = oy + e.clientY - sy; moved = Math.max(moved, Math.hypot(e.clientX - sx, e.clientY - sy)); K.style.translate = tx + "px " + ty + "px" }
+      const r = $("#eyes").getBoundingClientRect(), dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2), d = Math.hypot(dx, dy) || 1, m = Math.min(5, d / 40);
+      $("#eyes").style.transform = `translate(${dx / d * m}px,${dy / d * m}px)`;
+      if (Math.random() < .12 && !dragging) fx(e.clientX, e.clientY, pick(["✨", "💗"]))
+    });
+    addEventListener("pointercancel", () => { dragging = false; K.style.translate = "0 0" });
+    addEventListener("pointerup", () => {
+      if (!dragging) return; dragging = false; ox = tx; oy = ty;
+      if (moved > 40) { say(pick(T.drag)); giggle() } else {
+        const n = Date.now();
+        if (n - lastTap < 350) { flash("spinning", 800); confetti(70); say(pick(T.spin)); lastTap = 0 }
+        else { flash("jumping", 650); hearts(); giggle(); say(pick(T.poke)); lastTap = n }
+      }
+      K.style.translate = "0 0"; ox = oy = tx = ty = 0
+    });
+    K.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flash("jumping", 650); hearts(); giggle(); say(pick(T.poke)) } });
+    addEventListener("keydown", e => { if (e.key.length === 1 && $("#main").classList.contains("show")) { ping(); const r = K.getBoundingClientRect(); fx(r.left + rnd(r.width), r.top, pick(["✨", "💗", "🎀"])) } });
+    setInterval(() => { if ($("#main").classList.contains("show") && !dragging) say(pick(T.idle)) }, 9000);
 
-/* ---- balloons ---- */
-const BC=["#ff6b9d","#ff8fb8","#ffb3cf","#f472b6","#ffc2d6","#ff3b6b","#d8b4fe"];
-function balloon(){const b=document.createElement("div");b.className="balloon";b.style.background=pick(BC);b.style.left=rnd(90)+"vw";b.style.animationDuration=9+rnd(7)+"s";
-b.addEventListener("pointerdown",()=>{b.classList.add("pop");popS();const r=b.getBoundingClientRect();for(let i=0;i<5;i++)fx(r.left+rnd(60),r.top+rnd(40),pick(["💗","✨","🎀"]));setTimeout(()=>b.remove(),220)});
-document.body.appendChild(b);setTimeout(()=>b.remove(),17000)}
-$("#bbtn").onclick=()=>{for(let i=0;i<5;i++)setTimeout(balloon,i*150);ping()};
+    /* ---- balloons ---- */
+    const BC = ["#ff6b9d", "#ff8fb8", "#ffb3cf", "#f472b6", "#ffc2d6", "#ff3b6b", "#d8b4fe"];
+    function balloon() {
+      const b = document.createElement("div"); b.className = "balloon"; b.style.background = pick(BC); b.style.left = rnd(90) + "vw"; b.style.animationDuration = 9 + rnd(7) + "s";
+      b.addEventListener("pointerdown", () => { b.classList.add("pop"); popS(); const r = b.getBoundingClientRect(); for (let i = 0; i < 5; i++)fx(r.left + rnd(60), r.top + rnd(40), pick(["💗", "✨", "🎀"])); setTimeout(() => b.remove(), 220) });
+      document.body.appendChild(b); setTimeout(() => b.remove(), 17000)
+    }
+    $("#bbtn").onclick = () => { for (let i = 0; i < 5; i++)setTimeout(balloon, i * 150); ping() };
 
-/* ---- cake ---- */
-$("#cake").addEventListener("click",()=>{const c=$("#cake");
-if(c.classList.contains("out")){c.classList.remove("out");$("#wishline").textContent="Tap the cake to blow out the candles 🕯️";return}
-c.classList.add("out");confetti(160);giggle();say("did you make a wish?? 🤫💖");
-$("#wishline").textContent="Wish made! It’s definitely coming true ✨ (tap to relight)"});
+    /* ---- cake ---- */
+    $("#cake").addEventListener("click", () => {
+      const c = $("#cake");
+      if (c.classList.contains("out")) { c.classList.remove("out"); $("#wishline").textContent = "Tap the cake to blow out the candles 🕯️"; return }
+      c.classList.add("out"); confetti(160); giggle(); say("did you make a wish?? 🤫💖");
+      $("#wishline").textContent = "Wish made! It’s definitely coming true ✨ (tap to relight)"
+    });
 
-/* ---- open the gift ---- */
-function openGift(){const g=$("#gate");if(g.classList.contains("out"))return;g.classList.add("out");setTimeout(()=>g.remove(),800);
-$("#main").classList.add("show");startM();confetti(160);
-for(let i=0;i<CFG.balloons;i++)setTimeout(balloon,i*500);
-setTimeout(()=>{say("happy birthday!! 🎉🎀");hearts(8);giggle()},700)}
-$("#gate").addEventListener("click",openGift);
-$("#gate").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" ")openGift()});
-</script>
+    /* ---- open the gift ---- */
+    function openGift() {
+      const g = $("#gate"); if (g.classList.contains("out")) return; g.classList.add("out"); setTimeout(() => g.remove(), 800);
+      $("#main").classList.add("show"); startM(); confetti(160);
+      for (let i = 0; i < CFG.balloons; i++)setTimeout(balloon, i * 500);
+      setTimeout(() => { say("happy birthday!! 🎉🎀"); hearts(8); giggle() }, 700)
+    }
+    $("#gate").addEventListener("click", openGift);
+    $("#gate").addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") openGift() });
+  </script>
 </body>
+
 </html>
