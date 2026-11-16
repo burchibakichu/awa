@@ -653,15 +653,17 @@
       name: "Bestie",
       tagline: "today is all about YOU ✨",
       cardTitle: "A little note for you",
-      cardBody: " Tell her how amazing she is, bring up a funny memory, and wish her the best year ever. (Edit this text in the CFG block at the top of the script.)",
-      sign: "— with love, from me 💋",
+      cardBody: "Hey Bestie, can you imagine that you are now 20?! Ohmygawdddd, TWENTY! Like, when did we grow up this fast? I still remember us being so small, so silly, and now look at you, all grown up and becoming such a beautiful person inside and out.\n\n💕 Happy birthday my wawa 💕 my favourite person in the whole world.\nI miss you a lot more than words can say, like actually, there are no words big enough to explain how much I miss you.\nI miss your laugh, your voice, your stupid jokes, your hugs, just everything about you.\n\nI can't wait to reunite with you and laugh at the top of our lungs until our stomachs hurt and we can't breathe, and also sob together with tears of happiness, because you know we will definitely cry. I just really can't wait for that moment when I can finally see you again and hold you tight and never let go.\n\nPlease know that I am super, super proud of you for who you are and the person you have become over the few years. You have grown so much, you have been through so much, and you still have the kindest heart. You deserve all the good things in this world ❤️❤️\n\nI pray and wish that this new chapter of your life will bring you all the happiness, love, peace, success, and everything that you truly deserve ❤️ May God bless you always, protect you, and keep that beautiful smile on your face forever.\n\nThank you for being my bestie, my sister, my safe place, my wawa and my forever love love love 💕\nNo matter how far we are, you will always have me and I will always have you, I will always be here cheering for you, loving you, and being proud of you.\n\nHappy 20th birthday my love. 💗💗 I love you so so so much, more than you will ever know. Enjoy your day, you deserve the whole world today and everyday.",
+      sign: "— Forever yours, Ayangse….like u call 💋",
       balloons: 8,
       musicFile: "music.mp3"
     };
     /* =================== */
     const $ = s => document.querySelector(s), rnd = n => Math.random() * n, pick = a => a[(rnd(a.length)) | 0];
     $("#title").innerHTML = "Happy Birthday,<br>" + CFG.name + "! 🎀<small>" + CFG.tagline + "</small>";
-    $("#ctitle").textContent = CFG.cardTitle; $("#cbody").textContent = CFG.cardBody; $("#csign").textContent = CFG.sign;
+    $("#ctitle").textContent = CFG.cardTitle;
+    $("#cbody").innerHTML = CFG.cardBody.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n\n/g,"</p><p>").replace(/\n/g,"<br>");
+    $("#csign").innerHTML = CFG.sign.replace(/\n/g,"<br>");
 
     /* background floaties */
     const bg = $("#bg");
